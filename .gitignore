@@ -1,0 +1,32 @@
+# Declare files for git to ignore.
+# Reference: https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+#
+# ignore eclipse project files
+.classpath
+.project
+.settings
+# ignore IntelliJ project files
+out
+.out
+*.iml
+.idea
+*.iws
+*.ipr
+# ignore Mac's .DS_Store files
+**/.DS_Store
+# ignore desktop.ini files
+**/desktop.ini
+# ignore generated directories and compiled output
+bin
+target
+**/*.class
+**/*.jar
+# ignore log files
+**/*.log
+# ignore archives
+*.7z
+*.gz
+*.rar
+*.tar
+*.zip
+/HELP.md

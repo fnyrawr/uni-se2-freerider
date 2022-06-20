@@ -1,0 +1,103 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "freerider.de APIs",
+    "description": "freerider.de application APIs",
+    "contact": {
+      "name": "F. Kate",
+      "email": "s51541@bht-berlin.de"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Inferred Url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "customers-controller",
+      "description": "Customers Controller"
+    },
+    {
+      "name": "service-controller",
+      "description": "Service Controller"
+    }
+  ],
+  "paths": {
+    "/api/v1/customers": {
+      "get": {
+        "tags": [
+          "customers-controller"
+        ],
+        "summary": "getCustomers",
+        "operationId": "getCustomersUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/customers/{id}": {
+      "get": {
+        "tags": [
+          "customers-controller"
+        ],
+        "summary": "getCustomer",
+        "operationId": "getCustomerUsingGET",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/server/stop": {
+      "get": {
+        "tags": [
+          "service-controller"
+        ],
+        "summary": "stop",
+        "operationId": "stopUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}

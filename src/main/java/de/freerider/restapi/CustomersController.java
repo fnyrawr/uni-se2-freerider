@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.freerider.datamodel.Customer;
 
+import de.freerider.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -119,14 +120,13 @@ class CustomersController implements CustomersAPI {
         if( jsonMap == null )
             return new ResponseEntity<>( null, HttpStatus.BAD_REQUEST );
         //
-        List<Customer> acceptedCustomers = new ArrayList<>();
         List<Map<String, Object>> rejectedCustomers = new ArrayList<>();
         List<Map<String, Object>> badRequestedCustomers = new ArrayList<>();
         for( Map<String, Object> kvpairs : jsonMap ) {
             Optional<Customer> customer = accept(kvpairs);
             if(!customer.isEmpty()) {
                 if(!customerRepository.existsById(customer.get().getId())) {
-                    acceptedCustomers.add(customer.get());
+                    customerRepository.save(customer.get());
                 }
                 else {
                     rejectedCustomers.add(kvpairs);
@@ -143,10 +143,6 @@ class CustomersController implements CustomersAPI {
         //
         if(!rejectedCustomers.isEmpty()) {
             return new ResponseEntity<>( rejectedCustomers, HttpStatus.CONFLICT );
-        }
-        // save entities if no conflicts occurred
-        for(Customer customer: acceptedCustomers) {
-            customerRepository.save(customer);
         }
         return new ResponseEntity<>( null, HttpStatus.CREATED );
     }
@@ -198,7 +194,7 @@ class CustomersController implements CustomersAPI {
 
         System.err.println( "DELETE /customers/" + id );
 
-        if(id < 0) return new ResponseEntity<List<?>>( HttpStatus.BAD_REQUEST ); // status 400
+        if(id <= 0) return new ResponseEntity<List<?>>( HttpStatus.BAD_REQUEST ); // status 400
         if(!customerRepository.existsById(id)) return new ResponseEntity<>( null, HttpStatus.NOT_FOUND ); // status 404
         customerRepository.deleteById(id);
         return new ResponseEntity<>( null, HttpStatus.ACCEPTED ); // status 202
@@ -252,7 +248,7 @@ class CustomersController implements CustomersAPI {
         }
         else {
             // find next available id
-            long i = 0;
+            long i = 1;
             while(customerRepository.existsById(i)) i++;
             customer.setId(i);
         }

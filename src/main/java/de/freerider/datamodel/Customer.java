@@ -1,5 +1,6 @@
 package de.freerider.datamodel;
 
+import javax.persistence.*;
 import java.util.*;
 
 
@@ -11,31 +12,40 @@ import java.util.*;
  * @author sgra64
  */
 
+@Entity
+@Table(name = "Customer")
 public class Customer {
 
     /**
      * id attribute, {@code < 0} invalid, can be set only once.
      */
+	@Id
+	@Column(name="ID")
     private long id = -1;
 
     /**
      * surname, never null, mapped to "" when empty.
      */
+	@Column(name="NAME")
     private String lastName = "";
 
     /**
      * none-surname name parts, never null, mapped to "" when empty.
      */
+	@Column(name="First_NAME")
     private String firstName = "";
 
     /**
      * contact information with multiple contact entries.
      */
+	@Transient // 1:n relation, currently not in table
     private List<String> contacts = new ArrayList<String>();
 
     /**
      * status information of a Customer.
      */
+	@Column(name="STATUS")
+	@Enumerated
     private Status status = Status.New;
 
 
@@ -76,7 +86,7 @@ public class Customer {
      */
     public Customer setId( long id ) {
     	// set id only once; id cannot be changed afterwards
-		this.id = ( this.id < 0 && id >= 0 )? id : this.id;
+		this.id = ( this.id < 0 && id > 0 )? id : this.id;
 		return this;
     }
 
